@@ -1,34 +1,79 @@
 ---
 title: "A3: SPL Library Checkouts"
+author: Aaron Lee
 output: html_document
 ---
 
 ### Introduction
 
-An introduction of the data and a description of the trends/books/items you are choosing to analyze (and why!)
+I've decided that I'm going to use the dataset with the items that have been checked out at least 10 times a month. I've decided to use this dataset because the dataset I wanted to use is unfortunately not loading from the database. Additionally, I think it's just more useful to look at relevant works (works that get checked out frequently) than obscure, irrelevant works. 
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+itemset <- read.csv("../../2017-2023-10-Checkouts-SPL-Data.csv")
+# Which year had the most checkouts?
+most_checkouts <- itemset %>% group_by(CheckoutYear) %>% summarize(total = sum(Checkouts)) %>% 
+  filter(total == max(total))
+most_year <- most_checkouts %>% pull(CheckoutYear)
+most_checkouts_figure <- most_checkouts %>% pull(total)
+# Which material type (books, movies, ebooks, etc.) got checked out the most?
+type <- itemset %>% group_by(MaterialType) %>% summarize(total = sum(Checkouts)) %>% 
+  filter(total == max(total))
+most_type <- type %>% pull(MaterialType)
+number_type <- type %>% pull(total)
+# Which specific item had the most checkouts between 2017 and 2023?
+item_type <- itemset %>% group_by(Title) %>% summarize(total = sum(Checkouts)) %>% 
+  filter(total == max(total))
+most_item <- item_type %>% pull(Title)
+item_most_num <- item_type %>% pull(total)
+# Which month sees the most checkouts?
+month_type <- itemset %>% group_by(CheckoutMonth) %>% summarize(avg_checkout = mean(Checkouts)) %>% 
+  filter(avg_checkout == max(avg_checkout))
+month_most <- month_type %>% pull(CheckoutMonth)
+month_num_most <- month_type %>% pull(avg_checkout)
+# What is largest amount of checkouts for one item in one month?
+most_item_checkout <- itemset %>% filter(Checkouts == max(Checkouts))
+item_most <- most_item_checkout %>% pull(Title)
+item_most_num <- most_item_checkout %>% pull(Checkouts)
+```
+
+
+After looking through the dataset, here are 5 values of interest I found to be interesting:
+
+* Which year had the most checkouts?
+  + **`r most_year`** had the most checkouts with **`r most_checkouts_figure`** checkouts.
+* Which material type (books, movies, ebooks, etc.) got checked out the most?
+  + **`r most_type`** was the most checked out material type with **`r number_type`** checkouts.
+* Which specific item had the most checkouts between 2017 and 2023?
+  + **`r most_item`** was the most checked out item between 2017 and 2023 with **`r item_most_num`** checkouts.
+* Which month sees the most checkouts?
+  + Month number **`r month_most`** is the month with the highest amount of checkouts from 2017 to 2023 with an average of **`r month_num_most`** checkouts per month.
+* What is largest amount of checkouts for one item in one month?
+  + The item with the most amount of checkouts in a single month is _**`r item_most`**_ with **`r item_most_num`** checkouts 
 
 ### Summary Information
 
-Write a summary paragraph of findings that includes the 5 values calculated from your summary information R
-script
+When I first see a large dataset like this, one of my first thoughts are: what are the extremes? Thus, in my findings, I found the the "most" of the variables. First, I looked at time. I found that the year that had the most checkouts in total was **`r most_year`** with **`r most_checkouts_figure`** checkouts. I then went smaller
+and found that December on average has the most checkouts with **`r month_num_most`** checkouts. My guess to this is because of Christmas books and movies being rented.
 
-These will likely be calculated using your DPLYR skills, answering questions such as:
+I then analyzed the checked out items. I found that **`r most_type`** was the most checked out material type with **`r number_type`** checkouts. This doesn't surprised me too much since the data is from a library, which are filled with books. On the contrary, the most checked out item between 2017 and 2023 is not a book, but a service: the SPL Hotspot was the most checked out item with **`r item_most_num`** checkouts.This makes a lot of sense, seeing that almost everybody needs wifi for their phones and computers. Finally, I wanted to find the largest amount of checkouts for a single item was in a month, and it turned out to be _**`r item_most`**_ with **`r item_most_num`** checkouts in June of 2020. This makes sense as the Black Lives Matter movement became very strong in June 2020 after the death of George Floyd.
 
-- What is the average number of checkouts for each item?
-- What is the month or year with the most/least checkouts for a book that you're interested in?
-- What is the month or year with the most/least checkouts for ebooks?
-- How has the number of print book checkouts changed over time?
-
-Feel free to calculate and report values that you find relevant.
 
 ### The Dataset
 
 - Who collected/published the data?  
+  + Seattle Public Library collected the data.
 - What are the parameters of the data (dates, number of checkouts, kinds of books, etc.)?
+  + Checkout month, checkout year, title of the work, material type, creator, publisher, ISBN, checkout type, number of checkouts, the item's subject, publication year, and usage class are all parameters of the data.
 - How was the data collected or generated?  
-- Why was the data collected?  
-- What, if any, ethical questions do you need to consider when working with this data?  
+  + Although it is not stated directly, I imagine that the Seattle Public Library uses an electronic checkout system.
+- Why was the data collected?
+  + The data is collected in part of a website called "Seattle Open Data". According to their website they provide data to the public so people outside of the government can help solve "civic" problems and also for the sake of transparency.
+- What, if any, ethical questions do you need to consider when working with this data?
+  + When it comes to ethical concerns, I don't really see how unfair bias or discrimation can be shown in checkout numbers.
 - What are possible limitations or problems with this data?   (at least 200 words)
+  + The data is fairly messy. For example, some publication years have brackets around them and some of them do not. The odd capitalization their titles also throws me off and can be a little confusing.
 
 
 ### First Trends Over Time Chart
