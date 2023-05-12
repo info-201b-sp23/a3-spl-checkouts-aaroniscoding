@@ -8,7 +8,7 @@ output: html_document
 
 I've decided that I'm going to use the dataset with the items that have been checked out at least 10 times a month. I've decided to use this dataset because the dataset I wanted to use is unfortunately not loading from the database. Additionally, I think it's just more useful to look at relevant works (works that get checked out frequently) than obscure, irrelevant works. 
 
-```{r, echo = FALSE, warning = FALSE, code = readLines("analysis.R")}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, code = readLines("analysis.R")}
 ```
 
 
@@ -46,7 +46,7 @@ Although I don't have any ethical questions, I am concerned by the messy and uno
 The first question that I wanted to ask was: How do checkout numbers compare between material types (books, movies, ebooks)? To answer this question I calculated the total number of checkouts of each material type over each month to not only get a sense of general popularity, but popularity over time (Note: for simplicity and cleanliness sake, I only included the 4 most checked-out material types.)
 
 
-```{r, echo = FALSE, warning = FALSE, code = readLines("chart1.R")}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, code = readLines("chart1.R")}
 ```
 
 Looking at the graph, we can see some very interesting trends and observations. First, we can see that at the start of the pandemic (early 2020) we see that both audiobooks and ebooks increase in checkouts while both books and video discs take a massive dive. This makes sense since library shut downs during the pandemic would logically result in less checkouts for physical items (books and discs) while digital items (audiobooks and ebooks) wouldn't be affected. 
@@ -57,7 +57,7 @@ Another trend that sticks out is that after the initial dip for books and discs,
 
 The second question I wanted to ask was: How do the checkouts compare between JK. Rowling and J.R.R. Tolkien? Both of these authors are two of the most popular authors of all time, each of them with world-renowned book series. However, I wanted to see whose books were more popular.
 
-```{r, echo = FALSE, warning = FALSE, code = readLines("chart2.R")}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, code = readLines("chart2.R")}
 ```
 
 One of the most obvious features of this graph is the massive spike in checkouts for J.K. Rowling's work. This coincides with the start with the pandemic so my guess is that many people started re-reading the Harry Potter books with the down time that they had. However, J.R.R. Tolkien's books did not spike the same way. The argument could be made that the Lord of the Rings is not as popular as the Harry Potter series but I'm still shocked that that there is barely a rise in checkouts.
@@ -66,7 +66,7 @@ One of the most obvious features of this graph is the massive spike in checkouts
 
 For my last choice, I watned to examine how people prefer to consume literature. Specifcally. do people prefer physical books, audiobooks, or ebooks? I was interested to see the data for this question because there seems to be an idea that people are reading books less and less. But does that mean that they're now listening to audio books? Maybe people prefer tablets (ebooks)? The data below shows the total number of checkouts for each medium from 2017 to 2023:
 
-```{r, echo = FALSE, code = readLines("chart3.R")}
+```{r, echo = FALSE, message = FALSE, warning=FALSE, code = readLines("chart3.R")}
 ```
 
 As seen in the graph, the physical book, is still the preferred method of consuming literature, while ebooks and audiobooks are second and third, respectively. However, this is data from only the Seattle Public Library; ebooks and audiobooks are easily accessible from other resources (i.e., Amazon and Spotify) so it would be wrong to conclude that this graph is representative of the general population.

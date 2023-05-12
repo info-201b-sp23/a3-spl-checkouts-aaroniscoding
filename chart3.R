@@ -1,6 +1,9 @@
+
 library("dplyr")
 library("stringr")
 library("ggplot2")
+library("plotly")
+library("scales")
 
 spl_df3 <- read.csv("../../2017-2023-10-Checkouts-SPL-Data.csv")
 
@@ -16,6 +19,7 @@ ggplot(data = group3) +
   geom_col(mapping = aes(x = MaterialType, y = total)) +
   labs(title = "How do people like consuming literature?", 
        x = "Method of consumption",
-       y = "Total checkouts") 
+       y = "Total checkouts") +
+  scale_y_continuous(labels = label_number_si())
 
 
