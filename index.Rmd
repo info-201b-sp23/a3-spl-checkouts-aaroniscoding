@@ -8,38 +8,11 @@ output: html_document
 
 I've decided that I'm going to use the dataset with the items that have been checked out at least 10 times a month. I've decided to use this dataset because the dataset I wanted to use is unfortunately not loading from the database. Additionally, I think it's just more useful to look at relevant works (works that get checked out frequently) than obscure, irrelevant works. 
 
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
-itemset <- read.csv("../../2017-2023-10-Checkouts-SPL-Data.csv")
-# Which year had the most checkouts?
-most_checkouts <- itemset %>% group_by(CheckoutYear) %>% summarize(total = sum(Checkouts)) %>% 
-  filter(total == max(total))
-most_year <- most_checkouts %>% pull(CheckoutYear)
-most_checkouts_figure <- most_checkouts %>% pull(total)
-# Which material type (books, movies, ebooks, etc.) got checked out the most?
-type <- itemset %>% group_by(MaterialType) %>% summarize(total = sum(Checkouts)) %>% 
-  filter(total == max(total))
-most_type <- type %>% pull(MaterialType)
-number_type <- type %>% pull(total)
-# Which specific item had the most checkouts between 2017 and 2023?
-item_type <- itemset %>% group_by(Title) %>% summarize(total = sum(Checkouts)) %>% 
-  filter(total == max(total))
-most_item <- item_type %>% pull(Title)
-item_most_num <- item_type %>% pull(total)
-# Which month sees the most checkouts?
-month_type <- itemset %>% group_by(CheckoutMonth) %>% summarize(avg_checkout = mean(Checkouts)) %>% 
-  filter(avg_checkout == max(avg_checkout))
-month_most <- month_type %>% pull(CheckoutMonth)
-month_num_most <- month_type %>% pull(avg_checkout)
-# What is largest amount of checkouts for one item in one month?
-most_item_checkout <- itemset %>% filter(Checkouts == max(Checkouts))
-item_most <- most_item_checkout %>% pull(Title)
-item_most_num <- most_item_checkout %>% pull(Checkouts)
+```{r, echo = FALSE, warning = FALSE, code = readLines("analysis.R")}
 ```
 
 
-After looking through the dataset, here are 5 values of interest I found to be interesting:
+After looking through the dataset, here are 5 values of interest I found to be interesting **(Note: The code for these values can be found in the r file "analysis.R" )**:
 
 * Which year had the most checkouts?
   + **`r most_year`** had the most checkouts with **`r most_checkouts_figure`** checkouts.
@@ -62,78 +35,38 @@ I then analyzed the checked out items. I found that **`r most_type`** was the mo
 
 ### The Dataset
 
-- Who collected/published the data?  
-  + Seattle Public Library collected the data.
-- What are the parameters of the data (dates, number of checkouts, kinds of books, etc.)?
-  + Checkout month, checkout year, title of the work, material type, creator, publisher, ISBN, checkout type, number of checkouts, the item's subject, publication year, and usage class are all parameters of the data.
-- How was the data collected or generated?  
-  + Although it is not stated directly, I imagine that the Seattle Public Library uses an electronic checkout system.
-- Why was the data collected?
-  + The data is collected in part of a website called "Seattle Open Data". According to their website they provide data to the public so people outside of the government can help solve "civic" problems and also for the sake of transparency.
-- What, if any, ethical questions do you need to consider when working with this data?
-  + When it comes to ethical concerns, I don't really see how unfair bias or discrimation can be shown in checkout numbers.
-- What are possible limitations or problems with this data?   (at least 200 words)
-  + The data is fairly messy. For example, some publication years have brackets around them and some of them do not. The odd capitalization their titles also throws me off and can be a little confusing.
+This data was collected by the Seattle Public Library from their database. It collects all the checkouts that have been made from 2017 to 2023. This includes not only books, but also ebooks, audiobooks, movies, and more. 
+The purpose of collecting this data is so it can be used on "Seattle Open Data" a website that provides data to the public so people outside of the government can help solve "civic" problems. Another reason is so the city can be transparent to its residents when it comes to information and data.For each checked out item, the database tracks mulitple parameters including the checkout year, checkout month, title, creator, item type, publisher, publication year, and more.
+
+Although I don't have any ethical questions, I am concerned by the messy and unorganized structure of the database. For example, the publication years have different formats and the titles have a lot of information other than the title so it can be hard to read.
 
 
 ### First Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+The first question that I wanted to ask was: How do checkout numbers compare between material types (books, movies, ebooks)? To answer this question I calculated the total number of checkouts of each material type over each month to not only get a sense of general popularity, but popularity over time (Note: for simplicity and cleanliness sake, I only included the 4 most checked-out material types.)
 
-The first chart that you will create and include will show the trend over time of your variable/topic/interest.
-Think carefully about what you want to communicate to your user (you may have to find relevant trends in the 
-dataset first!). Here are some requirements to help guide your design:
 
-- Show more than one, but fewer than ~10 trends
-  - For example, two books, or 5 different mediums
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear - legend title
-In your .Rmd file, make sure to describe why you included the chart, and what patterns emerged
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the 
-variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
-```{r, echo = FALSE, warning = FALSE, code = readLines("chart1_example.R")}
+```{r, echo = FALSE, warning = FALSE, code = readLines("chart1.R")}
 ```
+
+Looking at the graph, we can see some very interesting trends and observations. First, we can see that at the start of the pandemic (early 2020) we see that both audiobooks and ebooks increase in checkouts while both books and video discs take a massive dive. This makes sense since library shut downs during the pandemic would logically result in less checkouts for physical items (books and discs) while digital items (audiobooks and ebooks) wouldn't be affected. 
+
+Another trend that sticks out is that after the initial dip for books and discs, we see that books made a swift recovery but discs plateaued. My guess to this is that many people acquired streaming service subscriptions during the pandemic so they didn't need to rent discs anymore.
 
 ### Second Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+The second question I wanted to ask was: How do the checkouts compare between JK. Rowling and J.R.R. Tolkien? Both of these authors are two of the most popular authors of all time, each of them with world-renowned book series. However, I wanted to see whose books were more popular.
 
-The second chart that you will create and include will show another trend over time of your 
-variable/topic/interest. Think carefully about what you want to communicate to your user (you may have to find 
-relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Show more than one, but fewer than ~10 trends
-  - For example, two books, or 5 different mediums
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear - legend title
-In your .Rmd file, make sure to describe why you included the chart, and what patterns emerged
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the 
-variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
-```{r, echo = FALSE, code = readLines("chart2_example.R")}
+```{r, echo = FALSE, warning = FALSE, code = readLines("chart2.R")}
 ```
+
+One of the most obvious features of this graph is the massive spike in checkouts for J.K. Rowling's work. This coincides with the start with the pandemic so my guess is that many people started re-reading the Harry Potter books with the down time that they had. However, J.R.R. Tolkien's books did not spike the same way. The argument could be made that the Lord of the Rings is not as popular as the Harry Potter series but I'm still shocked that that there is barely a rise in checkouts.
 
 ### Your Choice
 
-The last chart is up to you. It could be a line plot, scatter plot, histogram, bar plot, stacked bar plot, and 
-more. Here are some requirements to help guide your design:
+For my last choice, I watned to examine how people prefer to consume literature. Specifcally. do people prefer physical books, audiobooks, or ebooks? I was interested to see the data for this question because there seems to be an idea that people are reading books less and less. But does that mean that they're now listening to audio books? Maybe people prefer tablets (ebooks)? The data below shows the total number of checkouts for each medium from 2017 to 2023:
 
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear legend title
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
-```{r, echo = FALSE, code = readLines("chart2_example.R")}
+```{r, echo = FALSE, code = readLines("chart3.R")}
 ```
 
-
+As seen in the graph, the physical book, is still the preferred method of consuming literature, while ebooks and audiobooks are second and third, respectively. However, this is data from only the Seattle Public Library; ebooks and audiobooks are easily accessible from other resources (i.e., Amazon and Spotify) so it would be wrong to conclude that this graph is representative of the general population.
